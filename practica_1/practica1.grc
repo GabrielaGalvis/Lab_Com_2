@@ -1,17 +1,17 @@
 options:
   parameters:
-    author: Gabriela
+    author: Gabriela_Nelson_Cristian
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
     copyright: UIS
-    description: ejemplo de un acumulador
+    description: Desarrollo practica 2
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: miprimer
+    id: practica_2
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: miprimer
+    title: practica_2
   states:
     bus_sink: false
     bus_source: false
@@ -89,16 +89,24 @@ blocks:
     _source_code: "import numpy as np\nfrom gnuradio import gr\n\n\nclass blk(gr.sync_block):\
       \  \n\n\n\tdef __init__(self,):  \n\t\t\"\"\"Bloque promediador\"\"\"\n\t\t\
       gr.sync_block.__init__( \n\t\tself,\n\t\tname='Time average',\n\t\tin_sig=[np.float32],\n\
-      \t\tout_sig=[np.float32,np.float32]\n\t\t)\n\t\tself.acum_anterior=0\n\t\tself.Ntotales=0\n\
-      \t\tself.acum_cuad=0\n\t\tself.acum_anterior2=0\n\n\tdef work(self, input_items,\
+      \t\tout_sig=[np.float32,np.float32,np.float32,np.float32,np.float32]\n\t\t)\n\
+      \t\tself.acum_anterior=0\n\t\tself.Ntotales=0\n\t\t#self.acum_cuad=0\n\t\t#self.acum_des=0\n\
+      \t\tself.acum_anterior2=0\n\t\tself.acum_anterior3=0\n\n\tdef work(self, input_items,\
       \ output_items):\n\t\tx=input_items[0]\n\t\ty1=output_items[0]#media\n\t\ty2=output_items[1]#media\
-      \ cuadratica\n\t\t\n\t\tN=len(x)\n\t\tself.Ntotales=self.Ntotales+N\n\t\tacumulado=self.acum_anterior+np.cumsum(x)#se\
-      \ usa esto debido a que se quiere saber el acumulado de toda \t\t\t#la se\xF1\
-      al no solo el de un vector\n\t\tself.acum_anterior=acumulado[N-1]\n\t\ty1[:]=acumulado/self.Ntotales\n\
-      \t\t\n\t\t#media cuadratica\n\t\t\n\t\tx2=np.multiply(x,x)\n\t\tacumulado2=self.acum_anterior2+np.cumsum(x2)#se\
+      \ cuadratica\n\t\ty3=output_items[2]#RMS\n\t\ty4=output_items[3]#Potencia promedio\n\
+      \t\ty5=output_items[4]#Desviacion estandar\n\t\t\n\t\tN=len(x)\n\t\tself.Ntotales=self.Ntotales+N\n\
+      \t\tacumulado=self.acum_anterior+np.cumsum(x)#se usa esto debido a que se quiere\
+      \ saber el acumulado de toda \t\t\t#la se\xF1al no solo el de un vector\n\t\t\
+      self.acum_anterior=acumulado[N-1]\n\t\ty1[:]=acumulado/self.Ntotales\n\t\t\n\
+      \t\t#media cuadratica\n\t\t\n\t\tx2=np.multiply(x,x)\n\t\tacumulado2=self.acum_anterior2+np.cumsum(x2)#se\
       \ usa esto debido a que se quiere saber el acumulado de toda \t\t\t#la se\xF1\
       al no solo el de un vector\n\t\tself.acum_anterior2=acumulado2[N-1]\n\t\ty2[:]=acumulado2/self.Ntotales\n\
-      \t\t\n\t\t\n\t\t\n\t\n\n\t\t\n\t\treturn len(x)\n\n      \n"
+      \t\t\n\t\t#RMS\n\t\t\n\t\ty3[:]=np.sqrt(y2)\n\t\t\n\t\t#Potencia promedio\n\t\
+      \t\n\t\ty4[:]=np.multiply(y3,y3)\n\t\t\n\t\t#Desviaci\xF3n estandar\n\t\t\n\t\
+      \tx3=np.multiply(x-y1,x-y1)\n\t\tacumulado3=self.acum_anterior3+np.cumsum(x3)#se\
+      \ usa esto debido a que se quiere saber el acumulado de toda \t\t\t#la se\xF1\
+      al no solo el de un vector\n\t\tself.acum_anterior3=acumulado3[N-1]\n\t\ty5[:]=np.sqrt(acumulado3/self.Ntotales)\t\
+      \n\t \n\n\t\t\n\t\treturn len(x)\n\n      \n"
     affinity: ''
     alias: ''
     comment: ''
@@ -106,11 +114,12 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Time average', 'blk', [], [('0', 'float', 1)], [('0', 'float', 1),
-      ('1', 'float', 1)], 'Bloque promediador', [])
+      ('1', 'float', 1), ('2', 'float', 1), ('3', 'float', 1), ('4', 'float', 1)],
+      'Bloque promediador', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [532, 431]
+    coordinate: [444, 342]
     rotation: 0
     state: true
 - name: qtgui_number_sink_0
@@ -173,7 +182,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [879, 198]
+    coordinate: [880, 216]
     rotation: 0
     state: true
 - name: qtgui_number_sink_0_0
@@ -239,6 +248,195 @@ blocks:
     coordinate: [868, 312]
     rotation: 0
     state: true
+- name: qtgui_number_sink_0_0_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'False'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '1'
+    min: '-1'
+    name: '"RMS"'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [874, 413]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0_0_0_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'False'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '1'
+    min: '-1'
+    name: '"Potencia promedio"'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [876, 516]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0_0_0_0_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'False'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '1'
+    min: '-1'
+    name: '"Desviaciion Estandar"'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [875, 623]
+    rotation: 0
+    state: true
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -273,11 +471,11 @@ blocks:
     gui_hint: ''
     label1: Entrada
     label10: Signal 10
-    label2: Salida
-    label3: Signal 3
-    label4: Signal 4
-    label5: Signal 5
-    label6: Signal 6
+    label2: Media
+    label3: Media cuadratica
+    label4: RMS
+    label5: Potencia  promedio
+    label6: Desviacion estandar
     label7: Signal 7
     label8: Signal 8
     label9: Signal 9
@@ -286,14 +484,14 @@ blocks:
     marker10: '-1'
     marker2: '2'
     marker3: '1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
+    marker4: '7'
+    marker5: '6'
+    marker6: '3'
     marker7: '-1'
     marker8: '-1'
     marker9: '-1'
     name: '""'
-    nconnections: '3'
+    nconnections: '6'
     size: '20'
     srate: samp_rate
     stemplot: 'True'
@@ -319,9 +517,9 @@ blocks:
     width10: '1'
     width2: '4'
     width3: '4'
-    width4: '1'
-    width5: '1'
-    width6: '1'
+    width4: '4'
+    width5: '4'
+    width6: '4'
     width7: '1'
     width8: '1'
     width9: '1'
@@ -333,7 +531,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [873, 72]
+    coordinate: [884, 19]
     rotation: 0
     state: true
 
@@ -346,6 +544,12 @@ connections:
 - [epy_block_0, '0', qtgui_time_sink_x_0, '1']
 - [epy_block_0, '1', qtgui_number_sink_0_0, '0']
 - [epy_block_0, '1', qtgui_time_sink_x_0, '2']
+- [epy_block_0, '2', qtgui_number_sink_0_0_0, '0']
+- [epy_block_0, '2', qtgui_time_sink_x_0, '3']
+- [epy_block_0, '3', qtgui_number_sink_0_0_0_0, '0']
+- [epy_block_0, '3', qtgui_time_sink_x_0, '4']
+- [epy_block_0, '4', qtgui_number_sink_0_0_0_0_0, '0']
+- [epy_block_0, '4', qtgui_time_sink_x_0, '5']
 
 metadata:
   file_format: 1

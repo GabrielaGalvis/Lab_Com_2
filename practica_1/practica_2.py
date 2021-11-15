@@ -5,10 +5,10 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: miprimer
-# Author: Gabriela
+# Title: practica_2
+# Author: Gabriela_Nelson_Cristian
 # Copyright: UIS
-# Description: ejemplo de un acumulador
+# Description: Desarrollo practica 2
 # GNU Radio version: 3.9.0.0
 
 from distutils.version import StrictVersion
@@ -41,12 +41,12 @@ import epy_block_0
 
 from gnuradio import qtgui
 
-class miprimer(gr.top_block, Qt.QWidget):
+class practica_2(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "miprimer", catch_exceptions=True)
+        gr.top_block.__init__(self, "practica_2", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("miprimer")
+        self.setWindowTitle("practica_2")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -64,7 +64,7 @@ class miprimer(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "miprimer")
+        self.settings = Qt.QSettings("GNU Radio", "practica_2")
 
         try:
             if StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
@@ -86,7 +86,7 @@ class miprimer(gr.top_block, Qt.QWidget):
             20, #size
             samp_rate, #samp_rate
             "", #name
-            5, #number of inputs
+            6, #number of inputs
             None # parent
         )
         self.qtgui_time_sink_x_0.set_update_time(0.10)
@@ -104,9 +104,9 @@ class miprimer(gr.top_block, Qt.QWidget):
 
 
         labels = ['Entrada', 'Media', 'Media cuadratica', 'RMS', 'Potencia  promedio',
-            'Signal 6', 'Signal 7', 'Signal 8', 'Signal 9', 'Signal 10']
+            'Desviacion estandar', 'Signal 7', 'Signal 8', 'Signal 9', 'Signal 10']
         widths = [4, 4, 4, 4, 4,
-            1, 1, 1, 1, 1]
+            4, 1, 1, 1, 1]
         colors = ['blue', 'red', 'green', 'black', 'cyan',
             'magenta', 'yellow', 'dark red', 'dark green', 'dark blue']
         alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
@@ -114,10 +114,10 @@ class miprimer(gr.top_block, Qt.QWidget):
         styles = [1, 1, 1, 1, 1,
             1, 1, 1, 1, 1]
         markers = [0, 2, 1, 7, 6,
-            -1, -1, -1, -1, -1]
+            3, -1, -1, -1, -1]
 
 
-        for i in range(5):
+        for i in range(6):
             if len(labels[i]) == 0:
                 self.qtgui_time_sink_x_0.set_line_label(i, "Data {0}".format(i))
             else:
@@ -130,6 +130,39 @@ class miprimer(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self.qtgui_number_sink_0_0_0_0_0 = qtgui.number_sink(
+            gr.sizeof_float,
+            0,
+            qtgui.NUM_GRAPH_HORIZ,
+            1,
+            None # parent
+        )
+        self.qtgui_number_sink_0_0_0_0_0.set_update_time(0.10)
+        self.qtgui_number_sink_0_0_0_0_0.set_title("Desviaciion Estandar")
+
+        labels = ['', '', '', '', '',
+            '', '', '', '', '']
+        units = ['', '', '', '', '',
+            '', '', '', '', '']
+        colors = [("black", "black"), ("black", "black"), ("black", "black"), ("black", "black"), ("black", "black"),
+            ("black", "black"), ("black", "black"), ("black", "black"), ("black", "black"), ("black", "black")]
+        factor = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+
+        for i in range(1):
+            self.qtgui_number_sink_0_0_0_0_0.set_min(i, -1)
+            self.qtgui_number_sink_0_0_0_0_0.set_max(i, 1)
+            self.qtgui_number_sink_0_0_0_0_0.set_color(i, colors[i][0], colors[i][1])
+            if len(labels[i]) == 0:
+                self.qtgui_number_sink_0_0_0_0_0.set_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_number_sink_0_0_0_0_0.set_label(i, labels[i])
+            self.qtgui_number_sink_0_0_0_0_0.set_unit(i, units[i])
+            self.qtgui_number_sink_0_0_0_0_0.set_factor(i, factor[i])
+
+        self.qtgui_number_sink_0_0_0_0_0.enable_autoscale(False)
+        self._qtgui_number_sink_0_0_0_0_0_win = sip.wrapinstance(self.qtgui_number_sink_0_0_0_0_0.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_number_sink_0_0_0_0_0_win)
         self.qtgui_number_sink_0_0_0_0 = qtgui.number_sink(
             gr.sizeof_float,
             0,
@@ -138,7 +171,7 @@ class miprimer(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_number_sink_0_0_0_0.set_update_time(0.10)
-        self.qtgui_number_sink_0_0_0_0.set_title("Promedio tiempo")
+        self.qtgui_number_sink_0_0_0_0.set_title("Potencia promedio")
 
         labels = ['', '', '', '', '',
             '', '', '', '', '']
@@ -276,14 +309,16 @@ class miprimer(gr.top_block, Qt.QWidget):
         self.connect((self.epy_block_0, 1), (self.qtgui_number_sink_0_0, 0))
         self.connect((self.epy_block_0, 2), (self.qtgui_number_sink_0_0_0, 0))
         self.connect((self.epy_block_0, 3), (self.qtgui_number_sink_0_0_0_0, 0))
-        self.connect((self.epy_block_0, 0), (self.qtgui_time_sink_x_0, 1))
-        self.connect((self.epy_block_0, 2), (self.qtgui_time_sink_x_0, 3))
+        self.connect((self.epy_block_0, 4), (self.qtgui_number_sink_0_0_0_0_0, 0))
         self.connect((self.epy_block_0, 1), (self.qtgui_time_sink_x_0, 2))
         self.connect((self.epy_block_0, 3), (self.qtgui_time_sink_x_0, 4))
+        self.connect((self.epy_block_0, 2), (self.qtgui_time_sink_x_0, 3))
+        self.connect((self.epy_block_0, 0), (self.qtgui_time_sink_x_0, 1))
+        self.connect((self.epy_block_0, 4), (self.qtgui_time_sink_x_0, 5))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "miprimer")
+        self.settings = Qt.QSettings("GNU Radio", "practica_2")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -300,7 +335,7 @@ class miprimer(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=miprimer, options=None):
+def main(top_block_cls=practica_2, options=None):
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')
